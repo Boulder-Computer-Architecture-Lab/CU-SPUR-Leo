@@ -1,16 +1,29 @@
-#include "util.h"
+//#include "util.h"
+#include "pht.h"
+
+unsigned char data[128];
+volatile int true = 1;
+char *mem;
+jmp_buf trycatch_buf;
+size_t CACHE_MISS;
+size_t pagesize = 4096;
 
 int main(int argc, const char **argv) {
     #ifdef linux
         // encourage core affinities
-        printf("pinning to core 0\n");
+        #ifndef GEM5_COMPAT
+            printf("pinning to core 0\n");
+        #endif
         cpu_set_t cpu_pool;
         CPU_SET(0,&cpu_pool); // only need to care about parent, child inherits parent's
         int res = sched_setaffinity(0,1,&cpu_pool);
-        printf("result %d \n", res);
+        #ifndef GEM5_COMPAT
+            printf("result %d \n", res);
+        #endif
 
     #endif
 
+    
     uint64_t total_start;
     uint64_t total_end;
 
@@ -28,12 +41,14 @@ int main(int argc, const char **argv) {
 
 
     int j = 0;
+    int tmp = 1;
+    int tmp2 = 0;
 
-    printf("enter options\n");
-    int tmp = 0;
-    scanf("%d",&tmp);
-    int tmp2 = 1;
-    scanf("%d",&tmp2);
+    #ifndef GEM5_COMPAT
+        printf("enter options\n");
+        scanf("%d",&tmp);
+        scanf("%d",&tmp2);
+    #endif
 
     pid_t pid = 0;
     char* test_name;
@@ -60,13 +75,15 @@ int main(int argc, const char **argv) {
         test_name = "stl";
         train_method = "";
     }
-    
-
-    printf("test: spectre-%s-%s \n\n",test_name,train_method);
+    #ifndef GEM5_COMPAT
+        printf("test: spectre-%s-%s \n\n",test_name,train_method);
+    #endif
     if (tmp2 == 1){
         pid = fork();
     }
-    nice(-30);
+    #ifndef GEM5_COMPAT
+        nice(-30);
+    #endif
     int size_bound = (tmp2 < 2) ? sizeof(DATA_SECRET) : sizeof(SECRET);
     
     #if USE_RDTSC_BEGIN_END
@@ -78,8 +95,10 @@ int main(int argc, const char **argv) {
     while(r.ops < MAX_DATA) {
         // for every byte in the string
         j = (j + 1) % size_bound;
-        printf("\033[F(process info) ");
-        printf("pgid: %5d, pid: %5d \r\n",__getpgid(pid),pid);
+        #ifndef GEM5_COMPAT
+            printf("\033[F(process info) ");
+            printf("pgid: %5d, pid: %5d \r\n",__getpgid(pid),pid);
+        #endif
         executor(trainer,&r,&m,&j,pid);
         if(!strncmp(m.leaked + sizeof(DATA) - 1, SECRET, sizeof(SECRET) - 1)) break;
     }
@@ -92,13 +111,16 @@ int main(int argc, const char **argv) {
     if (pid != 0){
         kill(pid,SIGTERM);
     }
-    printf("\n\x1b[1A[ ]\n\n[\x1b[32m>\x1b[0m] Done, %u cycles\n", (total_end - total_start));
-    sleep(1);
+    #ifndef GEM5_COMPAT
+        printf("\n\x1b[1A[ ]\n\n[\x1b[32m>\x1b[0m] Done, %u cycles\n", (total_end - total_start));
+        sleep(1);
+    #endif
 
     FILE *fptr;
     fptr = fopen("ca_ip.csv","w");
     
     analyseOpData(&r,fptr);
+    fprintf(fptr,"\n%s", m.leaked);
     free(m._mem);
 
 

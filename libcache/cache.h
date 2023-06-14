@@ -18,9 +18,9 @@
 /* ============================================================
  *                    User configuration
  * ============================================================ */
-static size_t CACHE_MISS = 0;
-static size_t pagesize = 0;
-char *mem;
+extern size_t CACHE_MISS;
+extern size_t pagesize;
+extern char *mem;
 
 #define USE_RDTSC_BEGIN_END     0
 
@@ -34,6 +34,8 @@ char *mem;
 
 
 // ---------------------------------------------------------------------------
+extern volatile int true;
+extern unsigned char data[128];
 static size_t perf_fd;
 void perf_init();
 
@@ -157,7 +159,7 @@ size_t detect_flush_reload_threshold();
 void maccess_speculative(void* ptr);
 
 // ---------------------------------------------------------------------------
-jmp_buf trycatch_buf;
+extern jmp_buf trycatch_buf;
 
 // ---------------------------------------------------------------------------
 void unblock_signal(int signum __attribute__((__unused__)));
@@ -179,6 +181,7 @@ void cache_encode(char data);
 
 // ---------------------------------------------------------------------------
 void cache_decode_pretty(char *leaked, int index);
+void cache_decode(char *leaked, int index);
 
 // ---------------------------------------------------------------------------
 void flush_shared_memory();

@@ -1,22 +1,22 @@
 Flat profile:
 
 Each sample counts as 0.01 seconds.
- no time accumulated
-
   %   cumulative   self              self     total           
- time   seconds   seconds    calls  Ts/call  Ts/call  name    
-  0.00      0.00     0.00     3026     0.00     0.00  mfence
-  0.00      0.00     0.00     2926     0.00     0.00  flush
-  0.00      0.00     0.00     1463     0.00     0.00  access_array
-  0.00      0.00     0.00     1363     0.00     0.00  cache_encode
-  0.00      0.00     0.00      235     0.00     0.00  rdtsc
-  0.00      0.00     0.00      133     0.00     0.00  sa
-  0.00      0.00     0.00      133     0.00     0.00  train_ip
-  0.00      0.00     0.00      100     0.00     0.00  addOpData
-  0.00      0.00     0.00      100     0.00     0.00  cache_decode
-  0.00      0.00     0.00        1     0.00     0.00  analyseOpData
-  0.00      0.00     0.00        1     0.00     0.00  flush_shared_memory
-  0.00      0.00     0.00        1     0.00     0.00  setup
+ time   seconds   seconds    calls  us/call  us/call  name    
+ 40.00      0.02     0.02   211907     0.09     0.09  rdtsc
+ 40.00      0.04     0.02   105472     0.19     0.38  flush_reload
+ 20.00      0.05     0.01    12490     0.80     0.80  mfence
+  0.00      0.05     0.00    12078     0.00     0.00  flush
+  0.00      0.05     0.00     6039     0.00     1.60  access_array
+  0.00      0.05     0.00     5627     0.00     0.00  cache_encode
+  0.00      0.05     0.00      549     0.00    75.06  genPHTAtk
+  0.00      0.05     0.00      549     0.00    16.01  sa
+  0.00      0.05     0.00      549     0.00    16.01  train_ip
+  0.00      0.05     0.00      412     0.00     0.00  addOpData
+  0.00      0.05     0.00      412     0.00    96.87  cache_decode
+  0.00      0.05     0.00        1     0.00     0.00  analyseOpData
+  0.00      0.05     0.00        1     0.00     0.00  flush_shared_memory
+  0.00      0.05     0.00        1     0.00     0.00  setup
 
  %         the percentage of the total running time of the
 time       program used by this function.
@@ -54,58 +54,75 @@ notice and this notice are preserved.
 		     Call graph (explanation follows)
 
 
-granularity: each sample hit covers 2 byte(s) no time propagated
+granularity: each sample hit covers 2 byte(s) for 20.00% of 0.05 seconds
 
 index % time    self  children    called     name
-                0.00    0.00     100/3026        sa [6]
-                0.00    0.00    2926/3026        access_array [3]
-[1]      0.0    0.00    0.00    3026         mfence [1]
+                                                 <spontaneous>
+[1]    100.0    0.00    0.05                 main [1]
+                0.00    0.04     549/549         genPHTAtk [2]
+                0.00    0.01     549/549         sa [8]
+                0.00    0.00       2/211907      rdtsc [5]
+                0.00    0.00       1/1           setup [15]
+                0.00    0.00       1/1           analyseOpData [13]
 -----------------------------------------------
-                0.00    0.00    2926/2926        access_array [3]
-[2]      0.0    0.00    0.00    2926         flush [2]
+                0.00    0.04     549/549         main [1]
+[2]     82.4    0.00    0.04     549         genPHTAtk [2]
+                0.00    0.04     412/412         cache_decode [4]
+                0.00    0.00     549/6039        access_array [7]
+                0.00    0.00     412/12490       mfence [6]
+                0.00    0.00     961/211907      rdtsc [5]
+                0.00    0.00     412/412         addOpData [12]
 -----------------------------------------------
-                0.00    0.00     133/1463        sa [6]
-                0.00    0.00    1330/1463        train_ip [7]
-[3]      0.0    0.00    0.00    1463         access_array [3]
-                0.00    0.00    2926/3026        mfence [1]
-                0.00    0.00    2926/2926        flush [2]
-                0.00    0.00    1363/1363        cache_encode [4]
+                0.02    0.02  105472/105472      cache_decode [4]
+[3]     79.8    0.02    0.02  105472         flush_reload [3]
+                0.02    0.00  210944/211907      rdtsc [5]
 -----------------------------------------------
-                0.00    0.00    1363/1363        access_array [3]
-[4]      0.0    0.00    0.00    1363         cache_encode [4]
+                0.00    0.04     412/412         genPHTAtk [2]
+[4]     79.8    0.00    0.04     412         cache_decode [4]
+                0.02    0.02  105472/105472      flush_reload [3]
 -----------------------------------------------
-                0.00    0.00       2/235         main [27]
-                0.00    0.00     233/235         sa [6]
-[5]      0.0    0.00    0.00     235         rdtsc [5]
+                0.00    0.00       2/211907      main [1]
+                0.00    0.00     961/211907      genPHTAtk [2]
+                0.02    0.00  210944/211907      flush_reload [3]
+[5]     40.0    0.02    0.00  211907         rdtsc [5]
 -----------------------------------------------
-                0.00    0.00     133/133         main [27]
-[6]      0.0    0.00    0.00     133         sa [6]
-                0.00    0.00     233/235         rdtsc [5]
-                0.00    0.00     133/133         train_ip [7]
-                0.00    0.00     133/1463        access_array [3]
-                0.00    0.00     100/3026        mfence [1]
-                0.00    0.00     100/100         cache_decode [9]
-                0.00    0.00     100/100         addOpData [8]
+                0.00    0.00     412/12490       genPHTAtk [2]
+                0.01    0.00   12078/12490       access_array [7]
+[6]     20.0    0.01    0.00   12490         mfence [6]
 -----------------------------------------------
-                0.00    0.00     133/133         sa [6]
-[7]      0.0    0.00    0.00     133         train_ip [7]
-                0.00    0.00    1330/1463        access_array [3]
+                0.00    0.00     549/6039        genPHTAtk [2]
+                0.00    0.01    5490/6039        train_ip [9]
+[7]     19.3    0.00    0.01    6039         access_array [7]
+                0.01    0.00   12078/12490       mfence [6]
+                0.00    0.00   12078/12078       flush [10]
+                0.00    0.00    5627/5627        cache_encode [11]
 -----------------------------------------------
-                0.00    0.00     100/100         sa [6]
-[8]      0.0    0.00    0.00     100         addOpData [8]
+                0.00    0.01     549/549         main [1]
+[8]     17.6    0.00    0.01     549         sa [8]
+                0.00    0.01     549/549         train_ip [9]
 -----------------------------------------------
-                0.00    0.00     100/100         sa [6]
-[9]      0.0    0.00    0.00     100         cache_decode [9]
+                0.00    0.01     549/549         sa [8]
+[9]     17.6    0.00    0.01     549         train_ip [9]
+                0.00    0.01    5490/6039        access_array [7]
 -----------------------------------------------
-                0.00    0.00       1/1           main [27]
-[10]     0.0    0.00    0.00       1         analyseOpData [10]
+                0.00    0.00   12078/12078       access_array [7]
+[10]     0.0    0.00    0.00   12078         flush [10]
 -----------------------------------------------
-                0.00    0.00       1/1           setup [12]
-[11]     0.0    0.00    0.00       1         flush_shared_memory [11]
+                0.00    0.00    5627/5627        access_array [7]
+[11]     0.0    0.00    0.00    5627         cache_encode [11]
 -----------------------------------------------
-                0.00    0.00       1/1           main [27]
-[12]     0.0    0.00    0.00       1         setup [12]
-                0.00    0.00       1/1           flush_shared_memory [11]
+                0.00    0.00     412/412         genPHTAtk [2]
+[12]     0.0    0.00    0.00     412         addOpData [12]
+-----------------------------------------------
+                0.00    0.00       1/1           main [1]
+[13]     0.0    0.00    0.00       1         analyseOpData [13]
+-----------------------------------------------
+                0.00    0.00       1/1           setup [15]
+[14]     0.0    0.00    0.00       1         flush_shared_memory [14]
+-----------------------------------------------
+                0.00    0.00       1/1           main [1]
+[15]     0.0    0.00    0.00       1         setup [15]
+                0.00    0.00       1/1           flush_shared_memory [14]
 -----------------------------------------------
 
  This table describes the call tree of the program, and was sorted by
@@ -198,7 +215,8 @@ notice and this notice are preserved.
 
 Index by function name
 
-   [3] access_array            [4] cache_encode            [5] rdtsc
-   [8] addOpData               [2] flush                   [6] sa
-  [10] analyseOpData          [11] flush_shared_memory    [12] setup
-   [9] cache_decode            [1] mfence                  [7] train_ip
+   [7] access_array           [10] flush                   [5] rdtsc
+  [12] addOpData               [3] flush_reload            [8] sa
+  [13] analyseOpData          [14] flush_shared_memory    [15] setup
+   [4] cache_decode            [2] genPHTAtk               [9] train_ip
+  [11] cache_encode            [6] mfence

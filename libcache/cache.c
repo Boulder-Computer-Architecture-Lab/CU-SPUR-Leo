@@ -15,7 +15,7 @@ void perf_init() {
 
 #if defined(__x86_64__)
 // ---------------------------------------------------------------------------
-uint64_t rdtsc() {
+__attribute__((__always_inline__)) uint64_t rdtsc() {
   uint64_t a, d;
   asm volatile("mfence");
 #if USE_RDTSCP
@@ -29,7 +29,7 @@ uint64_t rdtsc() {
 }
 
 // ---------------------------------------------------------------------------
-uint64_t rdtsc_begin() {
+__attribute__((__always_inline__)) uint64_t rdtsc_begin() {
   uint64_t a, d;
   asm volatile ("mfence\n\t"
     "CPUID\n\t"
@@ -45,7 +45,7 @@ uint64_t rdtsc_begin() {
 }
 
 // ---------------------------------------------------------------------------
-uint64_t rdtsc_end() {
+__attribute__((__always_inline__)) uint64_t rdtsc_end() {
   uint64_t a, d;
   asm volatile("mfence\n\t"
     "RDTSCP\n\t"
@@ -105,7 +105,7 @@ void maccess_tsx(void* ptr) {
 
 #elif defined(__i386__)
 // ---------------------------------------------------------------------------
-uint32_t rdtsc() {
+__attribute__((__always_inline__)) uint32_t rdtsc() {
   uint32_t a, d;
   asm volatile("mfence");
 #if USE_RDTSCP
@@ -143,7 +143,7 @@ int has_tsx() {
 
 #elif defined(__aarch64__)
 // ---------------------------------------------------------------------------
-uint64_t rdtsc() {
+__attribute__((__always_inline__)) uint64_t rdtsc() {
 #if ARM_CLOCK_SOURCE == ARM_PERF
   long long result = 0;
 
@@ -182,7 +182,7 @@ uint64_t rdtsc() {
 #endif
 }
 // ---------------------------------------------------------------------------
-uint64_t rdtsc_begin() {
+__attribute__((__always_inline__)) uint64_t rdtsc_begin() {
 #if ARM_CLOCK_SOURCE == ARM_PERF
   long long result = 0;
 
@@ -220,7 +220,7 @@ uint64_t rdtsc_begin() {
 
 
 // ---------------------------------------------------------------------------
-uint64_t rdtsc_end() {
+__attribute__((__always_inline__)) uint64_t rdtsc_end() {
 #if ARM_CLOCK_SOURCE == ARM_PERF
   long long result = 0;
 
@@ -287,7 +287,7 @@ uint64_t rdtsc() {
 }
 
 // ---------------------------------------------------------------------------
-uint64_t rdtsc_begin() {
+__attribute__((__always_inline__)) uint64_t rdtsc_begin() {
   uint64_t time;
   asm volatile ("mfspr %0, 268\n\t"
                 "lwsync\n\t" : "=r" (time));
@@ -296,7 +296,7 @@ uint64_t rdtsc_begin() {
 }
 
 // ---------------------------------------------------------------------------
-uint64_t rdtsc_end() {
+__attribute__((__always_inline__)) uint64_t rdtsc_end() {
   uint64_t time;
   asm volatile ("mfspr %0, 268\n\t"
                 "lwsync\n\t" : "=r" (time));
@@ -321,7 +321,7 @@ void nospec() { asm volatile( "hwsync" ); }
 #endif
 
 // ---------------------------------------------------------------------------
-int flush_reload(void *ptr) {
+__attribute__((__always_inline__)) int flush_reload(void *ptr) {
   uint64_t start = 0, end = 0;
 
 #if USE_RDTSC_BEGIN_END
@@ -506,6 +506,19 @@ void cache_decode_pretty(char *leaked, int index) {
         printf("\x1b[33m%s\x1b[0m\r", leaked);
       }
       fflush(stdout);
+      sched_yield();
+    }
+  }
+}
+
+void cache_decode(char *leaked, int index) {
+  int mix_i;
+  for(int i = 0; i < 256; i++) {
+    mix_i = ((i * 167) + 13) & 255; // avoid prefetcher
+    if(flush_reload(mem + mix_i * pagesize)) {
+      if((mix_i >= 'A' && mix_i <= 'Z') && leaked[index] == ' ') {
+        leaked[index] = mix_i;
+      }
       sched_yield();
     }
   }
