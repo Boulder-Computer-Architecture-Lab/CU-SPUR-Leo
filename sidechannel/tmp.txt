@@ -1,3 +1,0 @@
-a valid sidechannel implements the following functionality:
-- cache encode mechanism
-- cache decode mechanism

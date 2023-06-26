@@ -1,0 +1,62 @@
+
+poc_x86:     file format elf64-x86-64
+
+
+Disassembly of section .init:
+
+Disassembly of section .plt:
+
+Disassembly of section .text:
+
+0000000000462024 <access_array>:
+  462024:	48 83 ec 28          	sub    $0x28,%rsp
+  462028:	89 7c 24 0c          	mov    %edi,0xc(%rsp)
+  46202c:	64 48 8b 04 25 28 00 	mov    %fs:0x28,%rax
+  462033:	00 00 
+  462035:	48 89 44 24 18       	mov    %rax,0x18(%rsp)
+  46203a:	31 c0                	xor    %eax,%eax
+  46203c:	48 c7 44 24 10 02 00 	movq   $0x2,0x10(%rsp)
+  462043:	00 00 
+  462045:	e8 21 fd f9 ff       	call   401d6b <mfence>
+  46204a:	48 8d 7c 24 10       	lea    0x10(%rsp),%rdi
+  46204f:	e8 09 fd f9 ff       	call   401d5d <flush>
+  462054:	48 8d 7c 24 0c       	lea    0xc(%rsp),%rdi
+  462059:	e8 ff fc f9 ff       	call   401d5d <flush>
+  46205e:	31 c0                	xor    %eax,%eax
+  462060:	e8 06 fd f9 ff       	call   401d6b <mfence>
+  462065:	48 63 54 24 0c       	movslq 0xc(%rsp),%rdx
+  46206a:	48 8b 44 24 10       	mov    0x10(%rsp),%rax
+  46206f:	f3 0f 2a ca          	cvtsi2ss %edx,%xmm1
+  462073:	48 85 c0             	test   %rax,%rax
+  462076:	78 07                	js     46207f <access_array+0x5b>
+  462078:	f3 48 0f 2a c0       	cvtsi2ss %rax,%xmm0
+  46207d:	eb 15                	jmp    462094 <access_array+0x70>
+  46207f:	48 89 c1             	mov    %rax,%rcx
+  462082:	83 e0 01             	and    $0x1,%eax
+  462085:	48 d1 e9             	shr    %rcx
+  462088:	48 09 c1             	or     %rax,%rcx
+  46208b:	f3 48 0f 2a c1       	cvtsi2ss %rcx,%xmm0
+  462090:	f3 0f 58 c0          	addss  %xmm0,%xmm0
+  462094:	f3 0f 5e c8          	divss  %xmm0,%xmm1
+  462098:	f3 0f 10 05 90 3f 07 	movss  0x73f90(%rip),%xmm0        # 4d6030 <_IO_stdin_used+0x30>
+  46209f:	00 
+  4620a0:	0f 2f c1             	comiss %xmm1,%xmm0
+  4620a3:	76 1f                	jbe    4620c4 <access_array+0xa0>
+  4620a5:	48 8d 05 74 21 0a 00 	lea    0xa2174(%rip),%rax        # 504220 <data>
+  4620ac:	0f b6 3c 10          	movzbl (%rax,%rdx,1),%edi
+  4620b0:	48 0f af 3d f8 ff 09 	imul   0x9fff8(%rip),%rdi        # 5020b0 <pagesize>
+  4620b7:	00 
+  4620b8:	48 03 3d 49 21 0a 00 	add    0xa2149(%rip),%rdi        # 504208 <mem>
+  4620bf:	e8 a0 fc f9 ff       	call   401d64 <maccess>
+  4620c4:	48 8b 44 24 18       	mov    0x18(%rsp),%rax
+  4620c9:	64 48 2b 04 25 28 00 	sub    %fs:0x28,%rax
+  4620d0:	00 00 
+  4620d2:	74 05                	je     4620d9 <access_array+0xb5>
+  4620d4:	e8 87 52 02 00       	call   487360 <__stack_chk_fail>
+  4620d9:	31 c0                	xor    %eax,%eax
+  4620db:	48 83 c4 28          	add    $0x28,%rsp
+  4620df:	c3                   	ret
+
+Disassembly of section __libc_freeres_fn:
+
+Disassembly of section .fini:

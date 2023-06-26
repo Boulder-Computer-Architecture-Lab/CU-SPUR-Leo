@@ -1,0 +1,16 @@
+{
+    "files.associations": {
+        "sched.h": "c",
+        "features.h": "c",
+        "cpu-set.h": "c",
+        "stddef.h": "c",
+        "x86intrin.h": "c",
+        "pht.h": "c",
+        "*.tcc": "cpp",
+        "chrono": "c",
+        "functional": "c",
+        "pthread.h": "c",
+        "stdlib.h": "c",
+        "stdio.h": "c"
+    }
+}
