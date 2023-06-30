@@ -21,6 +21,7 @@ int flush_reload_t(void *ptr) {
   maccess(ptr);
 
   end = __rdtscp(&junk);
+  _mm_mfence();
   flush(ptr);
 
   return (int)(end - start);

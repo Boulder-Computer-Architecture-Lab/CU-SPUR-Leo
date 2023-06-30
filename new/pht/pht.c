@@ -36,7 +36,7 @@ uint8_t array1[160] = {
 uint8_t unused2[64];
 uint8_t array2[256 * 512];
 
-char * secret = "foo bar";
+char * secret = "foo";
 
 uint8_t temp = 0; /* Used so compiler won’t optimize out victim_function() */
 
@@ -61,7 +61,7 @@ void readMemoryByte(size_t malicious_x, uint8_t value[2], int score[2]) {
 
   for (i = 0; i < 256; i++)
     results[i] = 0;
-  for (tries = 999; tries > 0; tries--) {
+  for (tries = 30; tries > 0; tries--) {
 
     /* Flush array2[256*(0..255)] from cache */
     for (i = 0; i < 256; i++)
@@ -118,7 +118,7 @@ void readMemoryByte(size_t malicious_x, uint8_t value[2], int score[2]) {
 int main(int argc,
   const char * * argv) {
   size_t malicious_x = (size_t)(secret - (char * ) array1); /* default for malicious_x */
-  int i, score[2], len = 7;
+  int i, score[2], len = 3;
   uint8_t value[2];
 
   for (i = 0; i < sizeof(array2); i++)
