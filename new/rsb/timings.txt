@@ -1,0 +1,185 @@
+variable transient execution window: 
+3978469000 - 3978794000: 3.25 * 10^5
+
+relevant instructions:
+O3PipeView:fetch:3978469000:0x0040186e:0:4501627:  MOVSX_B_R_P : rdip   t7d, t7d
+O3PipeView:decode:3978476000 // 7000
+O3PipeView:rename:3978477000 // 1000
+O3PipeView:dispatch:3978479000 // 2000
+O3PipeView:issue:3978479000 // 0
+O3PipeView:complete:3978480000 // 1000
+
+O3PipeView:fetch:3978469000:0x0040186e:1:4501628:  MOVSX_B_R_P : ld   t1b, DS:[t0 + t7 + 0x9e83f]
+O3PipeView:decode:3978476000 // 7000
+O3PipeView:rename:3978477000 // 1000
+O3PipeView:dispatch:3978479000 // 2000
+O3PipeView:issue:3978793000 // 314000 or smth
+O3PipeView:complete:3978794000 // 1000
+
+O3PipeView:fetch:3978469000:0x0040186e:2:4501629:  MOVSX_B_R_P : sexti   ecx, t1d, 0x7
+O3PipeView:decode:3978476000 // 7000
+O3PipeView:rename:3978477000 // 1000
+O3PipeView:dispatch:3978479000 // 2000
+O3PipeView:issue:0
+O3PipeView:complete:0
+
+O3PipeView:fetch:3978469000:0x00401875:0:4501630:  IMUL_R_P : rdip   t7d, t7d
+O3PipeView:decode:3978476000 // 7000
+O3PipeView:rename:3978477000 // 1000
+O3PipeView:dispatch:3978479000 // 2000
+O3PipeView:issue:3978479000 // 0
+O3PipeView:complete:3978480000 // 1000
+
+O3PipeView:fetch:3978469000:0x00401875:1:4501631:  IMUL_R_P : ld   t1d, DS:[t0 + t7 + 0x9e834]
+O3PipeView:decode:3978476000 // 7000
+O3PipeView:rename:3978477000 // 1000
+O3PipeView:dispatch:3978479000 // 2000
+O3PipeView:issue:3978726000 //  247000
+O3PipeView:complete:3978727000 // 1000
+
+O3PipeView:fetch:3978469000:0x00401875:2:4501632:  IMUL_R_P : mul1s   ecx, t1d
+O3PipeView:decode:3978476000 // 7000
+O3PipeView:rename:3978477000 // 1000
+O3PipeView:dispatch:3978479000 // 2000
+O3PipeView:issue:0
+O3PipeView:complete:0
+
+O3PipeView:fetch:3978469000:0x00401875:3:4501633:  IMUL_R_P : mulel   ecx, ecx
+O3PipeView:decode:3978476000 // 7000
+O3PipeView:rename:3978477000 // 1000
+O3PipeView:dispatch:3978479000 // 2000
+O3PipeView:issue:0
+O3PipeView:complete:0
+
+O3PipeView:fetch:3978473000:0x00401875:4:4501634:  IMUL_R_P : muleh   t0d, t0d
+O3PipeView:decode:3978477000 // 4000
+O3PipeView:rename:3978478000 // 1000
+O3PipeView:dispatch:3978480000 // 2000
+O3PipeView:issue:0
+O3PipeView:complete:0
+
+O3PipeView:fetch:3978473000:0x0040187c:0:4501635:  MOVSXD_R_R : sexti   rcx, rcx, 0x1f
+O3PipeView:decode:3978477000 // 4000
+O3PipeView:rename:3978478000 // 1000
+O3PipeView:dispatch:3978480000 // 2000
+O3PipeView:issue:0
+O3PipeView:complete:0
+
+O3PipeView:fetch:3978475000:0x0040187f:0:4501636:  ADD_R_P : rdip   t7, t7
+O3PipeView:decode:3978477000 // 2000
+O3PipeView:rename:3978478000 // 1000
+O3PipeView:dispatch:3978480000 // 2000
+O3PipeView:issue:3978480000 // 0
+O3PipeView:complete:3978481000 // 1000
+
+O3PipeView:fetch:3978475000:0x0040187f:1:4501637:  ADD_R_P : ld   t1, DS:[t0 + t7 + 0xa07ea]
+O3PipeView:decode:3978477000 // 2000
+O3PipeView:rename:3978478000 // 1000
+O3PipeView:dispatch:3978480000 // 2000
+O3PipeView:issue:3978726000 // 246000
+O3PipeView:complete:3978727000 // 1000
+
+O3PipeView:fetch:3978475000:0x0040187f:2:4501638:  ADD_R_P : add   rcx, rcx, t1
+O3PipeView:decode:3978477000 // 2000
+O3PipeView:rename:3978478000 // 1000
+O3PipeView:dispatch:3978480000 // 2000
+O3PipeView:issue:0
+O3PipeView:complete:0
+
+O3PipeView:fetch:3978475000:0x00401886:0:4501639:  MOV_R_M : ld   rax, DS:[rcx]
+O3PipeView:decode:3978477000 // 2000
+O3PipeView:rename:3978478000 // 1000
+O3PipeView:dispatch:3978480000 // 2000
+O3PipeView:issue:0
+O3PipeView:complete:0
+
+
+
+literal transient execution window:
+3978452000 - 3978719000: 2.67 * 10^5
+
+relevant instructions:
+
+O3PipeView:fetch:3978452000:0x0040186e:0:4501972:  IMUL_R_P_I : rdip   t7d, t7d
+O3PipeView:decode:3978459000 // 7000
+O3PipeView:rename:3978460000 // 1000
+O3PipeView:dispatch:3978462000 // 2000
+O3PipeView:issue:3978462000 // 0
+O3PipeView:complete:3978463000 // 1000
+
+O3PipeView:fetch:3978452000:0x0040186e:1:4501973:  IMUL_R_P_I : limm   t1d, 0x53
+O3PipeView:decode:3978459000 // 7000
+O3PipeView:rename:3978460000 // 1000
+O3PipeView:dispatch:3978462000 // 2000
+O3PipeView:issue:3978462000 // 0
+O3PipeView:complete:3978463000 // 1000
+
+O3PipeView:fetch:3978452000:0x0040186e:2:4501974:  IMUL_R_P_I : ld   t2d, DS:[t0 + t7 + 0x9e83b]
+O3PipeView:decode:3978459000 // 7000
+O3PipeView:rename:3978460000 // 1000
+O3PipeView:dispatch:3978462000 // 2000
+O3PipeView:issue:3978709000 // 247000
+O3PipeView:complete:3978710000 // 1000
+
+O3PipeView:fetch:3978452000:0x0040186e:3:4501975:  IMUL_R_P_I : mul1s   t2d, t1d
+O3PipeView:decode:3978459000 // 7000
+O3PipeView:rename:3978460000 // 1000
+O3PipeView:dispatch:3978462000 // 2000
+O3PipeView:issue:3978712000 // 0
+O3PipeView:complete:3978715000 // 3000
+
+O3PipeView:fetch:3978452000:0x0040186e:4:4501976:  IMUL_R_P_I : mulel   ecx, ecx
+O3PipeView:decode:3978459000 // 7000
+O3PipeView:rename:3978460000 // 1000
+O3PipeView:dispatch:3978462000 // 2000
+O3PipeView:issue:3978715000 // 253000
+O3PipeView:complete:3978716000 // 1000
+
+O3PipeView:fetch:3978452000:0x0040186e:5:4501977:  IMUL_R_P_I : muleh   t0d, t0d
+O3PipeView:decode:3978459000 // 7000
+O3PipeView:rename:3978460000 // 1000
+O3PipeView:dispatch:3978462000 // 2000
+O3PipeView:issue:3978715000 // 253000
+O3PipeView:complete:3978716000 // 1000
+
+O3PipeView:fetch:3978452000:0x00401875:0:4501978:  MOVSXD_R_R : sexti   rcx, rcx, 0x1f
+O3PipeView:decode:3978459000 // 7000
+O3PipeView:rename:3978460000 // 1000
+O3PipeView:dispatch:3978462000 // 2000
+O3PipeView:issue:3978716000 //  254000
+O3PipeView:complete:3978717000 // 1000
+
+O3PipeView:fetch:3978456000:0x00401878:0:4501979:  ADD_R_P : rdip   t7, t7
+O3PipeView:decode:3978460000 // 4000
+O3PipeView:rename:3978461000 // 1000
+O3PipeView:dispatch:3978463000 // 2000
+O3PipeView:issue:3978463000 // 0
+O3PipeView:complete:3978464000 // 1000
+
+O3PipeView:fetch:3978456000:0x00401878:1:4501980:  ADD_R_P : ld   t1, DS:[t0 + t7 + 0xa07f1]
+O3PipeView:decode:3978460000 // 4000
+O3PipeView:rename:3978461000 // 1000
+O3PipeView:dispatch:3978463000 // 2000
+O3PipeView:issue:3978709000 // 246000
+O3PipeView:complete:3978710000 // 1000
+
+O3PipeView:fetch:3978456000:0x00401878:2:4501981:  ADD_R_P : add   rcx, rcx, t1
+O3PipeView:decode:3978460000 // 4000
+O3PipeView:rename:3978461000 // 1000
+O3PipeView:dispatch:3978463000 // 2000
+O3PipeView:issue:3978717000 // 254000
+O3PipeView:complete:3978718000 // 1000
+
+O3PipeView:fetch:3978458000:0x0040187f:0:4501982:  MOV_R_M : ld   rax, DS:[rcx]
+O3PipeView:decode:3978460000 // 2000
+O3PipeView:rename:3978461000 // 1000
+O3PipeView:dispatch:3978463000 // 2000
+O3PipeView:issue:3978718000 // 255000
+O3PipeView:complete:3978719000 // 1000
+
+
+
+
+
+
+compare what happens on a given pc that does roughly the same thing
