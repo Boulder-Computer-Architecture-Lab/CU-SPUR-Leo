@@ -9,25 +9,17 @@ size_t CACHE_MISS = 150;
 size_t pagesize = 4096;
 int junk;
 
+void __attribute__((__always_inline__)) maccess(void *p) { asm volatile("movq (%0), %%rax\n" : : "c"(p) : "rax"); }
 int flush_reload_t(void *ptr) {
   register uint64_t start = 0, end = 0;
   start = __rdtscp(&junk);
-  /* #if USE_RDTSC_BEGIN_END
-    start = rdtsc_begin();
-  #else
-    start = rdtsc();
-  #endif */
   maccess(ptr);
 
 
   end = __rdtscp(&junk);
-  /* #if USE_RDTSC_BEGIN_END
-    end = rdtsc_end();
-  #else
-    end = rdtsc();
-  #endif */
 
-  flush(ptr);
+  _mm_mfence();
+  _mm_clflush(ptr);
 
   return (int)(end - start);
 }
@@ -35,37 +27,28 @@ int flush_reload_t(void *ptr) {
 void main(){
     //char tmp[256*pagesize];
     char *tmp = malloc(256*pagesize);
-    FILE *fptr;
     int x;
 
-    mfence();
+    _mm_mfence();
     int mix_i;
     for (int i =0 ; i < 256; i++){
-      flush(tmp + i * pagesize);
+      _mm_clflush(tmp + i * pagesize);
     }
     
+    _mm_mfence();
     tmp[1*pagesize] = 10;
-    fptr = fopen("fr_1.csv","w");
+    _mm_clflush(tmp);
+    _mm_mfence();
     for (int i =0; i < 256; i++){
         mix_i = ((i * 167) + 13) & 255;
-        fprintf(fptr, "%d->%d:%d, ",i,mix_i,flush_reload_t(tmp+mix_i*pagesize));
+        if (flush_reload_t(tmp+mix_i*pagesize) <= 80){
+          printf("hit at %d", mix_i);
+        }
+        _mm_mfence();
     }
-    fclose(fptr);
 
 
-    mfence();
-
-    for (int i =0 ; i < 256; i++){
-      flush(tmp + i * pagesize);
-    }
-    
-
-    mfence();
-    fptr = fopen("fr_2.csv","w");
-    for (int i =0; i < 256; i++){
-        mix_i = ((i * 167) + 13) & 255;
-        fprintf(fptr, "%d->%d:%d, ",i,mix_i,flush_reload_t(tmp+mix_i*pagesize));
-    }
-    fclose(fptr);
+    _mm_mfence();
+    free(tmp);
   
 }

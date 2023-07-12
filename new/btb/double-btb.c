@@ -44,6 +44,7 @@ int flush_reload_t(void *ptr) {
   register uint64_t start = 0, end = 0;
   start = __rdtscp(&junk);
   maccess(ptr);
+  //junk = *((int*) ptr);
 
   end = __rdtscp(&junk);
   _mm_mfence();

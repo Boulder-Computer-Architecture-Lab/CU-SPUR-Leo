@@ -5,7 +5,7 @@ unsigned char data[128];
 volatile int true = 1;
 char *mem;
 jmp_buf trycatch_buf;
-size_t CACHE_MISS = 106;
+size_t CACHE_MISS = 60;
 size_t pagesize = 4096;
 
 int main(int argc, const char **argv) {

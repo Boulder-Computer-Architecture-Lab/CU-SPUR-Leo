@@ -9,7 +9,8 @@ __attribute__((__always_inline__)) int flush_reload(void *ptr) {
     #else
         start = rdtsc();
     #endif */
-    maccess(ptr);
+    //maccess(ptr);
+    junk = *(int*)ptr;
     end = __rdtscp(&junk);
     /* #if USE_RDTSC_BEGIN_END
         end = rdtsc_end();
