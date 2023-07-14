@@ -1,22 +1,16 @@
-#pragma once
+#ifndef _FLUSH_RELOAD_
 #define _FLUSH_RELOAD_
 
 #include <x86intrin.h>
 #include <stdint.h>
 #include <stdio.h>
 
-typedef struct fr_channel{
-    char* oracle_block;
-    size_t offset;
-    int results[256];
-} fr_channel;
-
-void make_channel(fr_channel *channel);
-void free_channel(fr_channel *channel);
 
 
+
+inline void __attribute__((__always_inline__)) maccess(void *p) {asm volatile("movq (%0), %%rax\n" : : "c"(p) : "rax"); }
 int flush_reload_t(void *ptr);
-void flush(fr_channel *channel);
+void flush(char* oracle_ptr, size_t offset);
 
-int probe(fr_channel *channel, int thresh);
-void encode(fr_channel *channel, char data);
+void probe(char* oracle_ptr, int thresh, size_t offset, int data[256]);
+#endif
