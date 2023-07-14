@@ -14,6 +14,11 @@ int pagesize = 4096;
 // secret not as global, but as local: function passing
 // segment calculation of location
 
+
+// 688: call_start
+// 680: call_leak
+// 678: call_manipulate
+
 void flush(void *p) { asm volatile("clflush 0(%0)\n" : : "c"(p) : "rax"); }
 
 // ---------------------------------------------------------------------------
