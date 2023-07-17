@@ -11,7 +11,7 @@
 // inaccessible (overwritten) secret
 #define SECRET      "SEC"
 #define OVERWRITE   '#'
-#define CACHE_MISS 80
+#define CACHE_MISS 100
 
 char* data;
 char* mem;
@@ -25,6 +25,8 @@ int junk = 0;
 
   Found possible load violation at addr: 0x4a208 between instructions [sn:1355637] and [sn:1355643]
   0x401924 and 0x401930
+
+  
 */
 
 // ---------------------------------------------------------------------------
@@ -85,6 +87,7 @@ void cache_decode_pretty(char *leaked, int index) {
       }
       //sched_yield();
     }
+    _mm_mfence();
   }
 }
 
@@ -98,7 +101,7 @@ int main(int argc, const char **argv) {
   mem = malloc(pagesize * 256);
   // page aligned
   // initialize memory
-  memset(mem, 0, pagesize * 256);
+  memset(mem, 1, pagesize * 256);
 
   // store secret
   strcpy(data, SECRET);

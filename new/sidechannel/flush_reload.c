@@ -34,7 +34,6 @@ void __attribute__((__always_inline__)) flush(char* oracle_ptr, size_t offset){
 }
 
 void __attribute__((__always_inline__)) probe(char* oracle_ptr, int thresh, size_t offset, int data[256]){
-    // TODO: include second-best?
     static int i, mix_i, j;
     static char* addr;
 
