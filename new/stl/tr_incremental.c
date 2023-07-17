@@ -11,11 +11,21 @@
 // inaccessible (overwritten) secret
 #define SECRET      "SEC"
 #define OVERWRITE   '#'
-#define CACHE_MISS 120
+#define CACHE_MISS 80
 
 char* data;
 char* mem;
 int junk = 0;
+
+/* 
+
+  401927: 1280943, 1294439, 1307935
+  -> 401930: 1280947, 1294443, 1307939
+     401937: 1280949, 1294445, 1307941
+
+  Found possible load violation at addr: 0x4a208 between instructions [sn:1355637] and [sn:1355643]
+  0x401924 and 0x401930
+*/
 
 // ---------------------------------------------------------------------------
 void maccess(void *p) { asm volatile("movq (%0), %%rax\n" : : "c"(p) : "rax"); }

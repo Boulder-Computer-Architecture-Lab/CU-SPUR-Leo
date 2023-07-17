@@ -71,7 +71,7 @@ int main(){
     int i = 0;
     data = malloc(128);
     probe_buf = malloc(256 * pagesize);
-    memset(probe_buf,0,pagesize*256); // required for probe buffer to work properly
+    memset(probe_buf,1,pagesize*256); // required for probe buffer to work properly
     strcpy(data,SECRET);
     int hits[256];
     int mix_i;
