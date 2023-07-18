@@ -1,0 +1,56 @@
+Disassembly of section .bss:
+
+00000000004a2020 <__bss_start+0x18>:
+	...
+
+00000000004a2080 <useless>: 40B (33 indexed). if array size less, 32, then 32B. if array size 16 or lower, then 16B
+00000000004a20a8 <fp1>: 8B
+00000000004a20b0 <fp2>: 8B
+00000000004a20b8 <probe_buf>: 8B
+00000000004a20c0 <junk>: 4B
+  4a20c0:	00 00                	add    %al,(%rax)
+	...
+
+00000000004a20c4 <result.7>: 4B
+  4a20c4:	00 00                	add    %al,(%rax)
+	...
+
+00000000004a20c8 <i.6>:
+	...
+
+00000000004a20e0 <results.5>:
+	...
+
+00000000004a24e0 <tries.4>:
+  4a24e0:	00 00                	add    %al,(%rax)
+	...
+
+00000000004a24e4 <k.2>:
+  4a24e4:	00 00                	add    %al,(%rax)
+	...
+
+00000000004a24e8 <j.1>:
+  4a24e8:	00 00                	add    %al,(%rax)
+	...
+
+00000000004a24ec <mix_i.0>:
+  4a24ec:	00 00                	add    %al,(%rax)
+	...
+
+00000000004a24f0 <mix_i.1>:
+  4a24f0:	00 00                	add    %al,(%rax)
+	...
+
+00000000004a24f4 <i.2>:
+  4a24f4:	00 00                	add    %al,(%rax)
+	...
+
+00000000004a24f8 <i.3>:
+  4a24f8:	00 00                	add    %al,(%rax)
+	...
+
+00000000004a24fc <t_junk.4>:
+  4a24fc:	00 00                	add    %al,(%rax)
+	...
+
+00000000004a2500 <__x86_string_control>:

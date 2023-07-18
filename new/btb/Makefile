@@ -1,4 +1,8 @@
 all: x86
 
-x86: pht_final.c
-	gcc -static btb_final.c ../sidechannel/flush_reload.o -o final.out
+x86: btb-scratch.c
+	make pkgbtb
+	gcc -static btb-scratch.c ../sidechannel/flush_reload.o btb.o -o final.out
+
+pkgbtb: btb.c
+	gcc -static -c btb.c

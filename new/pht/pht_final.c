@@ -6,12 +6,9 @@
 #include <x86intrin.h> /* for rdtscp and clflush */
 #include <string.h>
 #include "../sidechannel/flush_reload.h"
+#include "pht.h"
+#include "../defines.h"
 
-
-#define CACHE_MISS 80
-#define PAGESIZE 4096
-#define SECRET "foobar"
-#define TRIES 10
 
 /********************************************************************
 Victim code.
@@ -21,18 +18,6 @@ char* victim_block;
 char* oracle_block;
 
 char* secret= SECRET;
-
-
-
-void victim_function(size_t x) {
-  // precompute address
-  char* addr = oracle_block + victim_block[x] *PAGESIZE;
-  _mm_mfence();
-  // a bounds check bypass: should not be able to access at 16 or above
-  if ((float)x / (float)array1_size < 1.0) {
-    maccess(addr);
-  }
-}
 
 /********************************************************************
 Analysis code

