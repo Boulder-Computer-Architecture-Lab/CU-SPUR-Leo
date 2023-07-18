@@ -6,12 +6,8 @@
 #include <x86intrin.h>
 
 #include "../sidechannel/flush_reload.h"
+#include "../defines.h"
 
-
-#define CACHE_MISS 80
-#define PAGESIZE 4096
-#define SECRET "foobar"
-#define TRIES 10
 char* oracle_block;
 
 // ! TODO: try void returns?
@@ -98,7 +94,7 @@ void readMemoryByte(char sec, uint8_t value[2], int score[2]){
 int main(int argc, const char **argv) {
   // Detect cache threshold
   char* secret = SECRET;
-  size_t secret_size = sizeof(SECRET) - 1;
+  size_t len = sizeof(SECRET) - 1;
 
   char cc;
 
@@ -112,9 +108,8 @@ int main(int argc, const char **argv) {
 
   _mm_mfence();
   
-  for (int p =0; p < secret_size; p++) {
-
-    cc = secret[p % secret_size]; // precomputation of character to extract
+  for (int i = 0; i < len; i++) {
+    cc = secret[i]; // precomputation of character to extract
     printf("Attempting to read %c... ", cc);
     readMemoryByte(cc, value, score);
     printf("%s: ", (score[0] >= 2 * score[1] ? "Success" : "Unclear"));
