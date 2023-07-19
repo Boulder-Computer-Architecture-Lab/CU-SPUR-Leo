@@ -9,7 +9,7 @@ void victim_function(size_t x) {
   }
 }
 
-int pht_atk(size_t malicious_x){
+void pht_atk(size_t malicious_x){
     static size_t training_x;
     static int x, j;
 

@@ -12,7 +12,7 @@ extern int (**fp2)(char *info);
 int attacker(char *info);
 int safe();
 int victim(char *info, int input);
-static inline int btb_atk(char *info){
+static inline void btb_atk(char *info){
     static char trash = '#';
     static int i;
     _mm_mfence();

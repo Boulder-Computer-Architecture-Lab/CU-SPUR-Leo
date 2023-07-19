@@ -11,7 +11,7 @@
 // inaccessible (overwritten) secret
 #define SECRET      "SEC"
 #define OVERWRITE   '#'
-#define CACHE_MISS 100
+#define CACHE_MISS 120
 
 char* data;
 char* mem;
@@ -48,6 +48,7 @@ char access_array(int x) {
   int tmp;
   // store secret in data
   strcpy(data, SECRET);
+  printf("ptr of contention location: %p\n", &data[x]);
 
   // flushing the data which is used in the condition increases
   // probability of speculation

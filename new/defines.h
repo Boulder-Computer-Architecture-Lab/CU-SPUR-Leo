@@ -4,5 +4,5 @@
 #define CACHE_MISS 80
 #define PAGESIZE 4096
 #define SECRET "foobar"
-#define TRIES 10
+#define TRIES 5
 #endif

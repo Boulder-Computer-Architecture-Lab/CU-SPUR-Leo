@@ -12,7 +12,7 @@ extern char* oracle_block;
 extern char* victim_block;
 extern unsigned int array1_size;
 
-int pht_atk(size_t malicious_x);
+void pht_atk(size_t malicious_x);
 void victim_function(size_t x);
 
 

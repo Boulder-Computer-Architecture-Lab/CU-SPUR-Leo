@@ -1,0 +1,23 @@
+spectre benchmark log
+running tests:rsb, btb, pht, 
+pht test results: 
+time: 3415540, time: 371420, time: 357320, time: 354400, time: 352440, || 255 (score  0), expected 102
+time: 486920, time: 484300, time: 443400, time: 356780, time: 354440, || 255 (score  0), expected 111
+time: 355220, time: 372520, time: 374480, time: 397440, time: 392740, || 255 (score  0), expected 111
+time: 355600, time: 367740, time: 435160, time: 353820, time: 353380, || 255 (score  0), expected  98
+time: 355500, time: 353480, time: 353360, time: 353100, time: 353240, || 255 (score  0), expected  97
+time: 355180, time: 353320, time: 353480, time: 353880, time: 353380, || 255 (score  0), expected 114
+btb test results: 
+time: 2678160, time: 980820, time: 924980, time: 911000, time: 863180, || 255 (score  0), expected 102
+time: 2000540, time: 968500, time: 1077800, time: 1670600, time: 954080, || 255 (score  0), expected 111
+time: 1274620, time: 1178660, time: 1177960, time: 941340, time: 901060, || 255 (score  0), expected 111
+time: 926060, time: 1193320, time: 886980, time: 882000, time: 852500, || 255 (score  0), expected  98
+time: 926500, time: 888980, time: 942580, time: 869600, time: 887880, || 255 (score  0), expected  97
+time: 892660, time: 872440, time: 877300, time: 924440, time: 877600, || 255 (score  0), expected 114
+rsb test results: 
+time: 916440, time: 268760, time: 265040, time: 330240, time: 263760, || 255 (score  0), expected 102
+time: 267580, time: 263400, time: 262920, time: 263060, time: 262780, || 255 (score  0), expected 111
+time: 263800, time: 262840, time: 262660, time: 262820, time: 262680, || 255 (score  0), expected 111
+time: 264240, time: 263200, time: 263020, time: 263760, time: 262800, || 255 (score  0), expected  98
+time: 264720, time: 262400, time: 338220, time: 262860, time: 262380, || 255 (score  0), expected  97
+time: 264280, time: 263860, time: 521360, time: 264020, time: 523500, || 255 (score  0), expected 114

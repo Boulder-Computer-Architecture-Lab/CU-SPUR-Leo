@@ -39,7 +39,7 @@ void confuse_compiler() {
 }
 
 
-int rsb_atk(char info){
+void rsb_atk(char info){
     flush(oracle_block, PAGESIZE);
     _mm_mfence();
     call_start(info);
