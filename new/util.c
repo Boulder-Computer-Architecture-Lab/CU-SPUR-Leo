@@ -14,9 +14,9 @@ static struct argp_option options[] = {
 static char args_doc[] = "ARG1 ARG2";
 
 void prepareArgs (struct args *a){
-    a->time_extract = 0;
+    a->time_extract = TIME_EX;
     a->tests_to_run = 0;
-    a->filename = 0;
+    a->filename = FILENAME;
 }
 
 error_t parse_opt(int key, char *arg, struct argp_state *state){
@@ -27,13 +27,13 @@ error_t parse_opt(int key, char *arg, struct argp_state *state){
         a->time_extract = 1; 
         break;
     case 'p':
-      a->tests_to_run |= 1;
+      a->tests_to_run |= PHT_CODE;
       break;
     case 'b':
-        a->tests_to_run |= 0b10;
+        a->tests_to_run |= BTB_CODE;
         break;
     case 'r':
-        a->tests_to_run |= 0b100;
+        a->tests_to_run |= RSB_CODE;
         break;
     case 'f':
         if (arg != 0){

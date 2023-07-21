@@ -91,6 +91,8 @@ int main(int argc, const char **argv) {
     char cc;
     int i,t, score[2];
     uint8_t value[2];
+    
+    prepareArgs(&a);
 
     if (parse(argc,argv,&a) != 0){
         printf("error in argument parsing\n");
@@ -104,9 +106,12 @@ int main(int argc, const char **argv) {
     }
 
     // mark tests
-
+    if (TESTS){
+        printf("overriding from TESTS macro");
+        a.tests_to_run = TESTS;   
+    }
     for (t = max_tests-1; t >= 0; t--){
-        if ((a.tests_to_run & (1 << t)) == (1 << t) || a.tests_to_run <= 0){
+        if ((a.tests_to_run & (1 << t)) == (1 << t) || a.tests_to_run == 0){
             tests[t].marked = 1;
             if (fptr){
                 fprintf(fptr, "%s, ", tests[t].testname);

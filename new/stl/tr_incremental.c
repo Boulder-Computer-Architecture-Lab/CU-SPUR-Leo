@@ -11,7 +11,7 @@
 // inaccessible (overwritten) secret
 #define SECRET      "SEC"
 #define OVERWRITE   '#'
-#define CACHE_MISS 120
+#define CACHE_MISS 80
 
 char* data;
 char* mem;
