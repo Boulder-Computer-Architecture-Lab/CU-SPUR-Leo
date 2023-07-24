@@ -136,6 +136,8 @@ int main(int argc, const char **argv) {
   }
 
   printf("%s", leaked);
+  free(data);
+  free(mem);
   //printf("\n[\x1b[32m>\x1b[0m] Done\n");
 
   return 0;

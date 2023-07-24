@@ -10,7 +10,7 @@
 #define CACHE_MISS 80
 #define PAGESIZE 4096
 #define SECRET "foobar"
-#define TRIES 5
+#define TRIES 5 // number of tries for each character: reducing may speed program up
 
 // command defaults
 #define TESTS 0

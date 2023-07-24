@@ -1,7 +1,11 @@
 # status
 currently, compiling and testing works with ``gcc 13.1.1`` (and associated ``glibc``) for ``amd64``.
 
-tests work on ``gem5.opt`` on ``amd64`` and ``aarch64`` architectures.
+tested gem5 host architectures:
+- ``aarch64``
+- ``amd64``
+
+the base binary without command-line options has been tested on all gem5 builds.
 
 
 # notes on gem5 compatibility
