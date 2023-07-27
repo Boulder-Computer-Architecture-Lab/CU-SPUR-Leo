@@ -12,6 +12,7 @@
 #include "pht/pht.h"
 #include "rsb/rsb.h"
 
+#define CAST_FPTR (void(*) (void*))
 
 struct testTarget{
     char* testname;
@@ -19,12 +20,12 @@ struct testTarget{
     uint8_t marked;
 };
 
-struct testTarget tests[] = {
-    {"pht", &pht_atk, 0},
-    {"btb", &btb_atk, 0},
-    {"rsb", &rsb_atk, 0},
+static struct testTarget tests[] = {
+    {"pht", CAST_FPTR pht_atk, 0},
+    {"btb", CAST_FPTR btb_atk, 0},
+    {"rsb", CAST_FPTR rsb_atk, 0},
 };
-int max_tests = 3;
+int max_tests = sizeof(tests) / sizeof(struct testTarget);
 
 
 char* oracle_block;
@@ -36,6 +37,7 @@ unsigned int array1_size = 16;
 
 FILE *fptr;
 struct args a;
+
 
 void readMemoryBrace(void* info, uint8_t value[2], int score[2]){
     static int tries, i, j, k, mix_i;
@@ -83,9 +85,8 @@ void readMemoryBrace(void* info, uint8_t value[2], int score[2]){
 }
 
 
-int main(int argc, const char **argv) {
-    // Detect cache threshold
-    char* secret;
+int main(int argc, char **argv) {
+    char* secret; // pointer to start of secret in victim_block
     size_t len = sizeof(SECRET) - 1;
 
     char cc;
@@ -98,16 +99,18 @@ int main(int argc, const char **argv) {
         printf("error in argument parsing\n");
         return 1;
     }
-
+    printf("attempting to extract secret '%s'\n", SECRET);
     if (a.filename != 0){
         fptr = fopen(a.filename, "w");
         fprintf(fptr, "spectre benchmark log\n");
+        fprintf(fptr, "attempting to extract secret '%s'\n", SECRET);
         fprintf(fptr, "running tests:");
     }
 
     // mark tests
     if (TESTS){
-        printf("overriding from TESTS macro");
+        printf("overriding from TESTS macro\n");
+        fprintf(fptr, "overriding from TESTS macro to %d\n", TESTS);
         a.tests_to_run = TESTS;   
     }
     for (t = max_tests-1; t >= 0; t--){
@@ -136,7 +139,7 @@ int main(int argc, const char **argv) {
     victim_block = malloc(array1_size + len);
 
 
-    // then, fill with 16 "visible" elements, then with secret;
+    // then, fill with array1_size "visible" elements and secret;
     memset(victim_block,1,array1_size);
     secret = victim_block + array1_size;
     memcpy(secret, SECRET, len);
@@ -171,13 +174,13 @@ int main(int argc, const char **argv) {
             
             printf("%s: ", (score[0] >= 2 * score[1] ? "success" : "unclear"));
             printf("0x%02X='%c' score=%d ", value[0],
-                (value[0] > 31 && value[0] < 127 ? value[0] : "?"), score[0]);
+                (value[0] > 31 && value[0] < 127 ? (char)value[0] : '?'), score[0]);
             if (score[1] > 0)
                 printf("(second best: 0x%02X score=%d)", value[1], score[1]);
             printf("\n");
             if (fptr){
                 fprintf(fptr, "|| %3d (score %2d)", value[0], score[0]);
-                if (score[1]) fprintf(fptr, " second %3d (score %2d)", value[1], score[1]);
+                if (score[1] > 0) fprintf(fptr, " second %3d (score %2d)", value[1], score[1]);
                 fprintf(fptr, ", expected %3d\n", secret[i]);
             }
         }
@@ -188,6 +191,8 @@ int main(int argc, const char **argv) {
     }
     
     free(oracle_block);
+    free(victim_block);
+    free(results);
 
     return (0);
 }

