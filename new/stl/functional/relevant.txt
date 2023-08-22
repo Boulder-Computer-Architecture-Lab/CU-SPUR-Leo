@@ -1,0 +1,200 @@
+store:
+dereferences start 40192d
+401931-40193a
+0x401942
+
+
+
+load:
+40194c
+401958: add %rcx, %rax: data + x?
+40195b/e
+40196f final
+
+store:
+
+INST: 40192d
+F: 2121383000
+D: +1000
+R: +1000
+P: +2000
+I/C/R/S: N/A
+
+O3PipeView:fetch:2121383000:0x0040192d:0:532965:  MOV_R_M : ld   rax, SS:[rbp + 0xffffffffffffffb8]
+O3PipeView:decode:2121384000
+O3PipeView:rename:2121385000
+O3PipeView:dispatch:2121387000
+O3PipeView:issue:0
+O3PipeView:complete:0
+O3PipeView:retire:0:store:0
+
+INST: 40192d
+F: 2121956000
+D: +1000
+R: +1000
+P: +2000
+I: +207000
+C: +1000
+R: +68000
+O3PipeView:fetch:2121956000:0x0040192d:0:533229:  MOV_R_M : ld   rax, SS:[rbp + 0xffffffffffffffb8]
+O3PipeView:decode:2121967000
+O3PipeView:rename:2121968000
+O3PipeView:dispatch:2121970000
+O3PipeView:issue:2122177000
+O3PipeView:complete:2122178000
+O3PipeView:retire:2122246000:store:0
+
+
+INST: 401942.0
+F: 2121479000
+D: +1000
+R: +1000
+D: +2000
+I: +0
+C: +1000
+R: +0
+INST: 401942.1
+F: 2121479000
+D: +1000
+R: +1000
+D: +2000
+I/C/R: 0
+
+O3PipeView:fetch:2121479000:0x00401942:0:532972:  MOV_M_I : limm   t1b, 0x23
+O3PipeView:decode:2121480000
+O3PipeView:rename:2121481000
+O3PipeView:dispatch:2121483000
+O3PipeView:issue:2121483000
+O3PipeView:complete:2121484000
+O3PipeView:retire:0:store:0
+O3PipeView:fetch:2121479000:0x00401942:1:532973:  MOV_M_I : st   t1b, DS:[rax]
+O3PipeView:decode:2121480000
+O3PipeView:rename:2121481000
+O3PipeView:dispatch:2121483000
+O3PipeView:issue:0
+O3PipeView:complete:0
+O3PipeView:retire:0:store:0
+
+INST: 401942.0
+F: 2121959000
+D: +9000
+R: +1000
+D: +2000
+I: +0
+C: +1000
+R: +354000
+INST: 401942.1
+F: 2121959000
+D: +9000
+R: +1000
+D: +2000
+I: +336000
+C: +1000
+R: +18000
+
+O3PipeView:fetch:2121959000:0x00401942:0:533236:  MOV_M_I : limm   t1b, 0x23
+O3PipeView:decode:2121968000
+O3PipeView:rename:2121969000
+O3PipeView:dispatch:2121971000
+O3PipeView:issue:2121971000
+O3PipeView:complete:2121972000
+O3PipeView:retire:2122326000:store:0
+O3PipeView:fetch:2121959000:0x00401942:1:533237:  MOV_M_I : st   t1b, DS:[rax]
+O3PipeView:decode:2121968000
+O3PipeView:rename:2121969000
+O3PipeView:dispatch:2121971000
+O3PipeView:issue:2122307000
+O3PipeView:complete:2122308000
+O3PipeView:retire:2122326000:store:2122330000
+
+load
+INST: 401958.0
+F: 2121480000
+D: +1000
+R: +1000
+P: +2000
+I/C/R: +0
+
+O3PipeView:fetch:2121480000:0x00401958:0:532980:  ADD_R_R : add   rax, rax, rcx
+O3PipeView:decode:2121481000
+O3PipeView:rename:2121482000
+O3PipeView:dispatch:2121484000
+O3PipeView:issue:0
+O3PipeView:complete:0
+O3PipeView:retire:0:store:0
+
+INST: 401958.0
+F: 2121960000
+D: +9000
+R: +1000
+P: +2000
+I: +333000
+C: +1000
+R: +1000
+
+O3PipeView:fetch:2121960000:0x00401958:0:533244:  ADD_R_R : add   rax, rax, rcx
+O3PipeView:decode:2121969000
+O3PipeView:rename:2121970000
+O3PipeView:dispatch:2121972000
+O3PipeView:issue:2122305000
+O3PipeView:complete:2122306000
+O3PipeView:retire:2122327000:store:0
+
+
+INST: 40196f
+F: 2121481000
+D: +1000
+R: +1000
+P: +2000
+I/C/R: 0
+
+O3PipeView:fetch:2121481000:0x0040196f:0:532992:  MOV_M_R : st   eax, SS:[rbp + 0xffffffffffffffa4]
+O3PipeView:decode:2121482000
+O3PipeView:rename:2121483000
+O3PipeView:dispatch:2121485000
+O3PipeView:issue:0
+O3PipeView:complete:0
+O3PipeView:retire:0:store:0
+
+INST: 40196f
+F: 2122314000
+D: +17000
+R: +1000
+P: +2000
+I: +199000
+C: +1000
+R: +2000
+
+O3PipeView:fetch:2122314000:0x0040196f:0:533399:  MOV_M_R : st   eax, SS:[rbp + 0xffffffffffffffa4]
+O3PipeView:decode:2122331000
+O3PipeView:rename:2122332000
+O3PipeView:dispatch:2122334000
+O3PipeView:issue:2122533000
+O3PipeView:complete:2122534000
+O3PipeView:retire:2122536000:store:2122540000
+
+
+
+
+delay from start of store sequence to end (successful):
+START: 2121956
+END: retire:2122326:store:2122330
+DELAY: 370
+
+delay from start of load sequence to end (successful):
+START: 2121960
+END: retire:2122536:store:2122540
+
+successful conclusion: entirely not interleaved
+
+
+
+delay from start of store seq. to end (unsuccessful):
+START: 2121383
+END: 2121484
+
+delay from start of load sequence to end (unsuccessful):
+START: 2121480
+END: 2121485
+
+unsuccessful conclusion: windows are interleaved, but stores are not sent so nothing is actually done

